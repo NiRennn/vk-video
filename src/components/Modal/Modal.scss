@@ -65,9 +65,11 @@
     width: 24px;
     height: 24px;
     display: block;
+    margin-bottom: 1px;
+
   }
 
-  button {
+  a {
     width: 100%;
     max-width: 332px;
     height: 44px;
@@ -83,6 +85,7 @@
     font-size: 16px;
     letter-spacing: -0.015em;
       gap: 4px;
+      text-decoration: none;
 
   }
 }

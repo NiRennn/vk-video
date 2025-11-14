@@ -67,6 +67,10 @@
   letter-spacing: -0.015em;
   cursor: pointer;
   transition: 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 
   &:hover {
     transform: scale(1.05);

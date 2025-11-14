@@ -26,10 +26,14 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
+    const handleLogoClick = () => {
+    window.location.reload();
+  };
+
   return (
     <header className="Header">
       <nav className="Header__content">
-        <picture className="pict">
+        <picture className="pict" onClick={handleLogoClick}>
           <img
             src="/icons/VK-Video-icon.svg"
             alt=""
@@ -76,3 +80,4 @@ export default function Header() {
     </header>
   );
 }
+ 

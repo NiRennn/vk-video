@@ -37,7 +37,7 @@ export default function Hero() {
             alt=""
             className="Hero__content-img n2"
           />
-          <img
+          <img 
             src="/images/hero3.png"
             alt=""
             className="Hero__content-img n3"

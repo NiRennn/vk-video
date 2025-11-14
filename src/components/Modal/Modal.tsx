@@ -129,13 +129,13 @@ export default function Modal({ onClose }: ModalProps) {
             </p>
           </div>
           <div className="Modal__content-bot">
-            <button className="Modal__content-bot-btn wh">
+            <a className="Modal__content-bot-btn wh" href="https://vkvideo.ru/">
               <img src="/icons/plus.svg" alt="" />
               <p>Создать новый канал VK&nbsp;Видео</p>
-            </button>
-            <button className="Modal__content-bot-btn gr">
+            </a>
+            <a className="Modal__content-bot-btn gr" href="https://vkvideo.ru/">
               <p>Зарегистрироваться в VK&nbsp;Видео</p>
-            </button>
+            </a>
           </div>
         </div>
       </div>

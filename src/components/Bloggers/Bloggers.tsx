@@ -95,7 +95,7 @@ export default function Bloggers({
 }) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLUListElement | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [, setMounted] = useState(false);
 
   const FOCUS_START = 0.7;
   const MAX_SCALE_ADD = 0.85;

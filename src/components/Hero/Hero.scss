@@ -6,7 +6,7 @@
   align-items: center;
   margin-top: 116px;
 }
- 
+
 .Hero__content {
   width: 100%;
   max-width: 1280px;
@@ -18,20 +18,18 @@
   justify-content: space-between;
   background: radial-gradient(120% 120% at 50% 95%, #0040ff 0%, #000000 85%);
   overflow: hidden;
-  
 }
 
 .Hero__content-header {
   font-family: "VK-Sans-Exp-Demibold.ttf";
-      font-size: 44px;
-      line-height: 110%;
-      letter-spacing: 0;
-      color: #FFFFFF;
-      margin-top: 54px;
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
-
+  font-size: 44px;
+  line-height: 110%;
+  letter-spacing: 0;
+  color: #ffffff;
+  margin-top: 54px;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
 }
 
 .Heo__content-imgBlock {
@@ -48,28 +46,33 @@
 }
 
 .n1 {
-    top: 20%;
-    left: -15%;
-    transform: translateX(-100%);
+  top: 20%;
+  left: -15%;
+  transform: translateX(-60%) translateY(-20%) scale(0.5);
 }
 
 .n2 {
-    left: 0;
-    bottom: 10%;
-    transform: translateX(-50%);
+  left: 0;
+  bottom: 4%;
+  transform: translateX(-50%) translateY(20%) scale(0.5);
 }
 .n3 {
+  transform:scale(0.5);
+  bottom: 52%;
+  left: 80%;
 
 }
 .n4 {
-    bottom: 10%;
-    right: -30%;
+  bottom: -5%;
+  left: 70%;
+  transform: scale(0.5);
 }
 .n5 {
-    right: -70%;
-    top: 35%;
-}
+  right: -70%;
+  bottom: 30%;
+    transform: scale(0.5);
 
+}
 
 .Hero-btnBlock {
   width: 100%;
@@ -77,16 +80,12 @@
   margin-top: 20px;
 }
 
-
-@media(max-width: 768px) {
+@media (max-width: 768px) {
   .Hero__content-lebedev {
     width: 352px;
   }
 
-
-
   .Hero__content {
-
   }
 
   .Hero {
@@ -94,18 +93,34 @@
   }
 
   .Hero__content-img {
-    transform: scale(0.6) translateX(-50%);
-     ;
+    transform: scale(0.3) translateX(-100%);
   }
-  .n3 {
-    right: -40%;
+.n1 {
+  top: 0;
+  left: -30%;
 }
-  .n5 {
-    right: -50%;
+
+.n2 {
+  left: -29%;
+  bottom: -20%;
+}
+.n3 {
+  bottom: 35%;
+  left: 80%;
+
+}
+.n4 {
+  bottom: -20%;
+  left: 85%;
+}
+.n5 {
+  right: -90%;
+  bottom: 18%;
+
 }
 }
 
-@media(max-width: 680px) {
+@media (max-width: 680px) {
   .Hero__content-header {
     font-size: 24px;
   }

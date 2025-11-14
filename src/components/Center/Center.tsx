@@ -70,9 +70,9 @@ export default function Center() {
             Присоединяйся к комьюнити авторов VK Видео: участвуй в конкурсах,
             выигрывай призы, приходи на вечеринки и узнавай новости первым
           </p>
-          <button className="Center__content-textBlock-btn">
+          <a href="https://vk.com/vkvideoauthors" className="Center__content-textBlock-btn">
             Перейти в сообщество для авторов
-          </button>
+          </a>
         </div>
 
         <div className="Center__content-imagesBlock">
