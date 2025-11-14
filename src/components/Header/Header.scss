@@ -1,0 +1,248 @@
+.Header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: #141414;
+}
+
+.Header__content {
+  width: 100%;
+  max-width: 1280px;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Header__content-logo {
+  width: 197px;
+  height: 52px;
+  object-fit: contain;
+  object-position: left center;
+  cursor: pointer;
+}
+
+.pict {
+  margin-right: 53px;
+}
+ 
+.Header__menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.Header__content-mid {
+  display: flex;
+  gap: 53px;
+}
+
+.Header__content-mid-item {
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-family: "VK-Sans-Regular.ttf";
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+.Header__content-btn {
+  width: 197px;
+  height: 52px;
+  background-color: #0077ff;
+  color: #ffffff;
+  font-family: "VK-Sans-Regular.ttf";
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  text-wrap: nowrap;
+  cursor: pointer;
+  transition: 0.5s ease;
+  margin-left: 53px;
+  gap: 4px;
+}
+
+.Header__content-btn:hover {
+  transform: scale(1.05);
+}
+
+.Header__content-mid-item:hover {
+  transform: scale(1.03);
+  color: #0077ff;
+}
+
+.Header__burger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  z-index: 110;
+}
+
+.Header__burger-line {
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, opacity 0.8s ease;
+}
+
+.third {
+  width: 22.5px;
+}
+
+.Header__burger.is-open .Header__burger-line:nth-child(1) {
+  transform: translateY(9px) translateX(1px) rotate(45deg);
+}
+
+.Header__burger.is-open .Header__burger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.Header__burger.is-open .Header__burger-line:nth-child(3) {
+  transform: rotate(-45deg) translateY(-5px) translateX(5px);
+  width: 36px;
+}
+
+@media (max-width: 1200px) {
+  .Header {
+    // padding: 0 20px;
+  }
+
+  .Header__content {
+    padding: 26px 0;
+  }
+
+  .pict {
+    margin-right: 0;
+    // width: 144px;
+  }
+
+  .Header__burger {
+    display: flex;
+  }
+
+  .Header__menu {
+    position: fixed;
+    top: 96px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 96px);
+    background-color: #141414;
+    padding: 0 80px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.7s ease, opacity 0.3s ease;
+     z-index: 90; 
+  }
+
+  .Header__menu.is-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .Header__content-mid {
+    flex-direction: column;
+    align-items: center;
+    gap: 53px;
+  }
+
+  .Header__content-btn {
+    width: 100%;
+    margin-left: 0;
+    max-width: 334px;
+    height: 67px;
+    margin-top: 53px;
+    position: relative;
+    // padding-right: 48px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .Header {
+    padding: 0 20px;
+  }
+
+  .Header__content-logo {
+    width: 144px;
+    height: 31px;
+  }
+
+  .Header__menu {
+    top: 88px;
+    height: calc(100vh - 88px);
+  }
+}
+
+@media (min-width: 1201px) {
+  .Header__menu {
+    position: static;
+    height: auto;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1201px) {
+  .Header__content {
+    position: relative;
+  }
+
+  .Header__content-mid {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 53px;
+
+    button {
+      text-wrap: nowrap;
+    }
+  }
+
+  .Header__menu {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .Header__content-btn {
+    margin-left: 53px;
+  }
+}

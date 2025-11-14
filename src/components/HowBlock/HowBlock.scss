@@ -1,0 +1,320 @@
+.HowBlock {
+  width: 100%;
+  padding: 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  margin-top: 200px;
+}
+ 
+.HowBlock__container {
+  width: 100%;
+  max-width: 1280px;
+  height: 100%;
+}
+
+.HowBlock__container-header {
+  font-family: "VK-Sans-Exp-Demibold.ttf";
+  font-size: 44px;
+  line-height: 140%;
+  letter-spacing: 0;
+  color: #ffffff;
+  margin-top: 54px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.HowBlock__container-stepBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 19px;
+}
+
+.HowBlock__container-step {
+  width: 100%;
+  border-radius: 20px;
+  padding-top: 32px;
+  height: 516px;
+  position: relative;
+  overflow: hidden;
+}
+
+.s1 {
+  background-color: #e1e3e6;
+}
+
+.s2 {
+  background-color: #222222;
+}
+
+.s3 {
+  background-color: #0077ff;
+}
+
+.HowBlock-btnBlock {
+  width: 100%;
+  max-width: 1280px;
+  margin-top: 20px;
+}
+
+.HowBlock__container-step--badge {
+  font-size: 16px;
+  line-height: 100%;
+  border-radius: 116px;
+  width: 93px;
+  height: 40px;
+  font-family: "VK-Sans-Medium.ttf";
+  padding: 10px 26px;
+  margin-left: 35px;
+}
+
+.HowBlock__container-step--textblock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-left: 35px;
+  margin-top: 30px;
+}
+
+.b1 {
+  background-color: #0000001a;
+  color: #000000;
+}
+.b2 {
+  background-color: #f0f1f51a;
+  color: #ffffff;
+}
+.b3 {
+  background-color: #f0f1f51a;
+  color: #ffffff;
+}
+
+.HowBlock__container-step--title {
+  font-family: "VK-Sans-Exp-Demibold.ttf";
+  font-size: 28px;
+  line-height: 110%;
+  letter-spacing: 0;
+}
+
+.HowBlock__container-step--subtitle {
+  font-family: "VK-Sans-Regular.ttf";
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: 100%;
+}
+
+.t1 {
+  color: #000000;
+}
+.t2 {
+  color: #ffffff;
+}
+.t3 {
+  color: #ffffff;
+}
+
+.st1 {
+  color: #000000b2;
+}
+.st2 {
+  color: #ffffffb2;
+}
+.st3 {
+  color: #ffffffb2;
+}
+
+.how-i1 {
+  width: 100%;
+  // position: absolute;
+  bottom: 0;
+}
+.how-i2 {
+  width: 100%;
+  // position: absolute;
+  bottom: 0;
+}
+.how-i3 {
+  width: 100%;
+  // position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.HowBlock__dots {
+  display: none;
+}
+
+.step-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+
+@media (max-width: 1200px) {
+  .HowBlock {
+    gap: 40px;
+    margin-top: 150px;
+  }
+
+  .HowBlock__container-stepBlock {
+    gap: 12px;
+  }
+
+  .HowBlock__container-step {
+    padding-top: 24px;
+    height: 440px;
+    border-radius: 16px;
+  }
+
+  .HowBlock__container-step--badge {
+    margin-left: 24px;
+    width: 80px;
+    height: 32px;
+    font-size: 14px;
+    padding: 8px 18px;
+  }
+
+  .HowBlock__container-step--textblock {
+    margin-left: 24px;
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .HowBlock__container-step--title {
+    font-size: 24px;
+  }
+
+  .HowBlock__container-step--subtitle {
+    font-size: 18px;
+    line-height: 120%;
+  }
+
+  .how-i1,
+  .how-i2,
+  .how-i3 {
+    transform-origin: bottom center;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .HowBlock {
+    margin-top: 114px;
+    padding: 0 20px;
+  }
+}
+
+
+@media (max-width: 680px) {
+  .HowBlock {
+    padding: 0 20px;
+  }
+
+  .HowBlock__container-header {
+    font-size: 22px;
+    line-height: 1.3;
+    text-align: left;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .HowBlock__container-stepBlock {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: 16px;
+  }
+
+  .HowBlock__container-stepBlock::-webkit-scrollbar {
+    display: none;
+  }
+
+  .HowBlock__container-step {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+
+    // height: 420px;
+    border-radius: 18px;
+    padding-top: 24px;
+  }
+
+  .HowBlock__container-step--badge {
+    margin-left: 20px;
+    width: 80px;
+    height: 32px;
+    font-size: 14px;
+    padding: 8px 18px;
+  }
+
+  .HowBlock__container-step--textblock {
+    margin-left: 20px;
+    margin-top: 20px;
+    gap: 8px;
+  }
+
+  .HowBlock__container-step--title {
+    font-size: 22px;
+    line-height: 120%;
+  }
+
+  .HowBlock__container-step--subtitle {
+    font-size: 16px;
+    line-height: 130%;
+  }
+
+  .how-i1,
+  .how-i2,
+  .how-i3 {
+    width: 100%;
+    bottom: 0;
+    right: 0;
+  }
+
+  .HowBlock-btnBlock {
+    max-width: 100%;
+    margin-top: 8px;
+  }
+
+  .HowBlock__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .HowBlock__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background-color: #ffffff33;
+    cursor: pointer;
+    transition:
+      width 0.2s ease,
+      background-color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .HowBlock__dot.is-active {
+    // width: 18px;
+    background-color: #ffffff;
+    opacity: 1;
+  }
+}
