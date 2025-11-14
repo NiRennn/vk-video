@@ -57,8 +57,7 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 1470px;
-  padding: 0 80px;
+  max-width: 1280px;
   overflow-y: hidden;
 }
 
@@ -216,13 +215,17 @@
 .Cabinet-btnBlockWrapper {
   width: 100%;
   padding: 0 80px;
+
   display: flex;
   justify-content: center;
+  // align-items: center;
+
 }
 
 .Cabinet-btnBlock {
   width: 100%;
   max-width: 1280px;
+
 }
 
 .Cabinet__dots {

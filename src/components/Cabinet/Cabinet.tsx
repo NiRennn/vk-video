@@ -12,7 +12,7 @@ export default function Cabinet() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+ 
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
