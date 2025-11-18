@@ -2,6 +2,7 @@ import "./App.scss";
 import Bloggers from "./components/Bloggers/Bloggers";
 import Cabinet from "./components/Cabinet/Cabinet";
 import Center from "./components/Center/Center";
+import { Faq } from "./components/FAQ/Faq";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
@@ -10,20 +11,18 @@ import Monet from "./components/Monet/Monet";
 import WhyBlock from "./components/WhyBlock/WhyBlock";
 
 function App() {
-
-
-  
   return (
     <div className="App">
       <Header />
 
       <Hero />
       <WhyBlock />
-      <HowBlock/>
-      <Cabinet/>
-      <Bloggers/>
-      <Monet/>
-      <Center/>
+      <HowBlock />
+      <Cabinet />
+      <Bloggers />
+      <Monet />
+      <Center />
+      <Faq/>
       <Footer />
     </div>
   );

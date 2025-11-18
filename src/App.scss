@@ -4,7 +4,7 @@
     format("truetype");
   font-style: normal;
   font-display: swap;
-}
+} 
 @font-face {
   font-family: "VK-Sans-Medium.ttf";
   src: url("./assets/fonts/VK Sans Display Medium.ttf") format("truetype");
@@ -14,6 +14,12 @@
 @font-face {
   font-family: "VK-Sans-Regular.ttf";
   src: url("./assets/fonts/VK Sans Display Regular.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "VK-Sans-Demibold.ttf";
+  src: url("./assets/fonts/VK Sans Display DemiBold.ttf") format("truetype");
   font-style: normal;
   font-display: swap;
 }
