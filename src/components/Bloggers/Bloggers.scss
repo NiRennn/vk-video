@@ -81,11 +81,12 @@
   aspect-ratio: 1/1;
   flex: 0 0 auto;
   transform: scale(var(--scale));
-  transition: transform 0.7s linear;
+  transition: transform 0.2s linear, margin-inline 0.2s linear; 
   isolation: isolate;
 
   margin-inline: var(--extraGap);
 }
+
 
 .bloggers__avatarWrap {
   position: relative;

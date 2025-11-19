@@ -21,7 +21,7 @@ import avatar17 from "/bloggers/ava-17.png";
 import avatar18 from "/bloggers/ava-18.png";
 import avatar19 from "/bloggers/ava-19.png";
 import avatar20 from "/bloggers/ava-20.png";
-import avatar21 from "/bloggers/ava-21.png"; 
+import avatar21 from "/bloggers/ava-21.png";
 import avatar22 from "/bloggers/ava-22.png";
 import avatar23 from "/bloggers/ava-23.png";
 import avatar24 from "/bloggers/ava-24.png";
@@ -172,11 +172,7 @@ export default function Bloggers({
     const isMobile =
       window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
 
-    const currentSpeed = prefersReduced
-      ? 0
-      : isMobile
-      ? speed * 0.4
-      : speed;
+    const currentSpeed = prefersReduced ? 0 : isMobile ? speed * 0.4 : speed;
 
     const tick = (now: number) => {
       const dt = Math.min(32, now - last);
@@ -210,6 +206,11 @@ export default function Bloggers({
       const vpCenter = vpRect.left + vpRect.width / 2;
       const influence = vpRect.width * 0.6;
 
+      const BASE_EXTRA_GAP = 32;
+
+      const scaleFactor = Math.min(1, vpRect.width / 1440);
+      const maxExtraGap = BASE_EXTRA_GAP * Math.max(0.5, scaleFactor);
+
       for (let i = 0; i < nodes.length; i++) {
         const el = nodes[i];
 
@@ -223,12 +224,12 @@ export default function Bloggers({
         const scale = 1 + focus * MAX_SCALE_ADD;
         const glow = focus > 0.28 ? focus : 0;
 
-        const extraGap = focus * 32;
+        const extraGap = focus * maxExtraGap;
 
         el.style.setProperty("--scale", scale.toFixed(3));
         el.style.setProperty("--glow", glow.toFixed(3));
         el.style.setProperty("--labelOpacity", focus.toFixed(3));
-        el.style.setProperty("--extraGap", `${extraGap}px`);
+        el.style.setProperty("--extraGap", `${extraGap.toFixed(2)}px`);
       }
 
       raf = requestAnimationFrame(tick);
