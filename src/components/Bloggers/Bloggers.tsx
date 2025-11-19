@@ -21,7 +21,7 @@ import avatar17 from "/bloggers/ava-17.png";
 import avatar18 from "/bloggers/ava-18.png";
 import avatar19 from "/bloggers/ava-19.png";
 import avatar20 from "/bloggers/ava-20.png";
-import avatar21 from "/bloggers/ava-21.png";
+import avatar21 from "/bloggers/ava-21.png"; 
 import avatar22 from "/bloggers/ava-22.png";
 import avatar23 from "/bloggers/ava-23.png";
 import avatar24 from "/bloggers/ava-24.png";
@@ -117,6 +117,7 @@ export default function Bloggers({
       el.style.setProperty("--scale", "1");
       el.style.setProperty("--glow", "0");
       el.style.setProperty("--labelOpacity", "0");
+      el.style.setProperty("--extraGap", "0px");
     });
 
     const waitImages = () =>
@@ -133,11 +134,20 @@ export default function Bloggers({
 
     const firstWidth = () => {
       const el = track.firstElementChild as HTMLElement | null;
-      return el ? el.offsetWidth + gap : 0;
+      if (!el) return 0;
+      const style = window.getComputedStyle(el);
+      const ml = parseFloat(style.marginLeft) || 0;
+      const mr = parseFloat(style.marginRight) || 0;
+      return el.offsetWidth + ml + mr + gap;
     };
+
     const lastWidth = () => {
       const el = track.lastElementChild as HTMLElement | null;
-      return el ? el.offsetWidth + gap : 0;
+      if (!el) return 0;
+      const style = window.getComputedStyle(el);
+      const ml = parseFloat(style.marginLeft) || 0;
+      const mr = parseFloat(style.marginRight) || 0;
+      return el.offsetWidth + ml + mr + gap;
     };
 
     const easeOutCubic = (u: number) => 1 - Math.pow(1 - u, 3);
@@ -151,8 +161,9 @@ export default function Bloggers({
       x = 0;
       track.style.transform = "translate3d(0,0,0)";
     };
+
     const ro = new ResizeObserver(onResize);
-    ro.observe(track);
+    ro.observe(viewport);
 
     const prefersReduced =
       window.matchMedia &&
@@ -171,8 +182,7 @@ export default function Bloggers({
       const dt = Math.min(32, now - last);
       last = now;
 
-x -= (currentSpeed * dt) / 1000;
-
+      x -= (currentSpeed * dt) / 1000;
 
       if (speed >= 0) {
         let fw = firstWidth();
@@ -198,7 +208,7 @@ x -= (currentSpeed * dt) / 1000;
       const trackLeft = track.getBoundingClientRect().left;
 
       const vpCenter = vpRect.left + vpRect.width / 2;
-      const influence = vpRect.width * 0.55;
+      const influence = vpRect.width * 0.6;
 
       for (let i = 0; i < nodes.length; i++) {
         const el = nodes[i];
@@ -213,9 +223,12 @@ x -= (currentSpeed * dt) / 1000;
         const scale = 1 + focus * MAX_SCALE_ADD;
         const glow = focus > 0.28 ? focus : 0;
 
+        const extraGap = focus * 32;
+
         el.style.setProperty("--scale", scale.toFixed(3));
         el.style.setProperty("--glow", glow.toFixed(3));
         el.style.setProperty("--labelOpacity", focus.toFixed(3));
+        el.style.setProperty("--extraGap", `${extraGap}px`);
       }
 
       raf = requestAnimationFrame(tick);
