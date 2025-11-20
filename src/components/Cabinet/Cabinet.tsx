@@ -12,7 +12,7 @@ export default function Cabinet() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
- 
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -122,43 +122,48 @@ export default function Cabinet() {
           </div>
         </div>
 
-        <div
-          className="Cabinet__content-bot"
-          ref={sliderRef}
-          onScroll={handleScroll}
-        >
-          <div className="Cabinet__content-bot-first">
-            <div className="Cabinet__content-bot-first-cabText">
-              <div>
-                <p className="cabText-title">Удобное управление контентом</p>
-                <p className="cabText-subtitle">
-                  Редактируй видео, сохраняй черновики, <br />
-                  планируй публикации и создавай <br />
-                  плейлисты <span>в пару кликов</span>
-                </p>
+        <div className="Cabinet__content-botWrapper">
+          <div
+            className="Cabinet__content-bot"
+            ref={sliderRef}
+            onScroll={handleScroll}
+          >
+            <div className="Cabinet__content-bot-first">
+              <div className="Cabinet__content-bot-first-cabText">
+                <div>
+                  <p className="cabText-title">Удобное управление контентом</p>
+                  <p className="cabText-subtitle">
+                    Редактируй видео, сохраняй черновики, <br />
+                    планируй публикации и создавай <br />
+                    плейлисты <span>в пару кликов</span>
+                  </p>
+                </div>
+              </div>
+              <div className="Cabinet__content-bot-first-cabImg">
+                <picture className="p-cimg1">
+                  <img src="/images/cab-top.png" alt="" className="cimg1" />
+                </picture>
               </div>
             </div>
-            <div className="Cabinet__content-bot-first-cabImg">
-              <picture className="p-cimg1">
-                <img src="/images/cab-top.png" alt="" className="cimg1" />
-              </picture>
-            </div>
-          </div>
 
-          <div className="Cabinet__content-bot-second">
-            <div className="Cabinet__content-bot-second-cabImg">
-              <picture className="p-cimg2">
-                <img src="/images/cab-bot.png" alt="" className="cimg2" />
-              </picture>
-            </div>
+            <div className="Cabinet__content-bot-second">
+              <div className="Cabinet__content-bot-second-cabImg">
+                <picture className="p-cimg2">
+                  <img src="/images/cab-bot.png" alt="" className="cimg2" />
+                </picture>
+              </div>
 
-            <div className="Cabinet__content-bot-second-cabText">
-              <div>
-                <p className="cabText-title">Редактирование после публикации</p>
-                <p className="cabText-subtitle">
-                  Добавляй тайм-коды и ссылки, вырезай лишнее из видео даже
-                  после публикации <span>— без потери лайков и просмотров</span>
-                </p>
+              <div className="Cabinet__content-bot-second-cabText">
+                <div>
+                  <p className="cabText-title">
+                    Редактирование после публикации
+                  </p>
+                  <p className="cabText-subtitle">
+                    Добавляй тайм-коды и ссылки, вырезай лишнее из видео даже
+                    после публикации{" "}
+                    <span>— без потери лайков и просмотров</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -178,7 +183,10 @@ export default function Cabinet() {
 
         <div className="Cabinet-btnBlockWrapper">
           <div className="Cabinet-btnBlock">
-            <Button text="Присоединиться&nbsp;к&nbsp;авторам" onClick={handleOpenModal} />
+            <Button
+              text="Присоединиться&nbsp;к&nbsp;авторам"
+              onClick={handleOpenModal}
+            />
           </div>
         </div>
       </div>

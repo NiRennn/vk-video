@@ -97,25 +97,25 @@ export default function Modal({ onClose }: ModalProps) {
     }
   };
 
-  // function sendModalCreateChannel() {
-  //   if (window._tmr) {
-  //     window._tmr.push({
-  //       id: "3718190",
-  //       type: "reachGoal",
-  //       goal: "createChannel",
-  //     });
-  //   }
-  // }
-
-  //   function sendModalAuthorize() {
-  //   if (window._tmr) {
-  //     window._tmr.push({
-  //       id: "3718190",
-  //       type: "reachGoal",
-  //       goal: "authorize",
-  //     });
-  //   }
-  // }
+  function sendModalCreateChannel() {
+    if (window._tmr) {
+      window._tmr.push({
+        id: "3718190",
+        type: "reachGoal",
+        goal: "createChannel",
+      });
+    }
+  }
+ 
+    function sendModalAuthorize() {
+    if (window._tmr) {
+      window._tmr.push({
+        id: "3718190",
+        type: "reachGoal",
+        goal: "authorize",
+      });
+    }
+  }
 
   return (
     <div
@@ -150,7 +150,7 @@ export default function Modal({ onClose }: ModalProps) {
           </div>
           <div className="Modal__content-bot">
             <a
-            // onClick={sendModalCreateChannel}
+            onClick={sendModalCreateChannel}
               className="Modal__content-bot-btn wh"
               href="https://vkvideo.ru/"
               target="_blank"
@@ -160,7 +160,7 @@ export default function Modal({ onClose }: ModalProps) {
               <p>Создать новый канал VK&nbsp;Видео</p>
             </a>
             <a
-            // onClick={sendModalAuthorize}
+            onClick={sendModalAuthorize}
               className="Modal__content-bot-btn gr"
               href="https://vkvideo.ru/"
               target="_blank"

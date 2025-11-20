@@ -7,6 +7,7 @@ export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
+    sendHeaderGoal("mainButtonOpenModal");
     setIsModalOpen(true);
   };
 
@@ -14,37 +15,39 @@ export default function Header() {
     setIsModalOpen(false);
   };
 
-  //   const sendHeaderGoal = (id: string) => {
-  //   if (!window._tmr) return;
+  const sendHeaderGoal = (id: string) => {
+    if (!window._tmr) return;
 
-  //   let goal: string | null = null;
+    let goal: string | null = null;
 
-  //   switch (id) {
-  //     case "features":
-  //       goal = "scrollToNewOpportunities";
-  //       break;
-  //     case "cabinet":
-  //       goal = "scrollToCabinet";
-  //       break;
-  //     case "monetization":
-  //       goal = "scrollToMonetization";
-  //       break;
-  //     default:
-  //       goal = null;
-  //   }
+    switch (id) {
+      case "features":
+        goal = "scrollToNewOpportunities";
+        break;
+      case "cabinet":
+        goal = "scrollToCabinet";
+        break;
+      case "monetization":
+        goal = "scrollToMonetization";
+        break;
+      case "mainButtonOpenModal":
+        goal = "mainButtonOpenModal";
+        break;
+      default:
+        goal = null;
+    }
 
-  //   if (!goal) return;
+    if (!goal) return;
 
-  //   window._tmr.push({
-  //     id: "3718190",
-  //     type: "reachGoal",
-  //     goal,
-  //   });
-  // };
+    window._tmr.push({
+      id: "3718190",
+      type: "reachGoal",
+      goal: goal,
+    });
+  };
 
   const handleScrollTo = (id: string) => {
-    // sendHeaderGoal(id);
-
+    sendHeaderGoal(id);
 
     const el = document.getElementById(id);
     if (!el) return;
@@ -57,7 +60,7 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
-    const handleLogoClick = () => {
+  const handleLogoClick = () => {
     window.location.reload();
   };
 
@@ -111,4 +114,3 @@ export default function Header() {
     </header>
   );
 }
- 

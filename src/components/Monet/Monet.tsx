@@ -17,7 +17,7 @@ export default function Monet() {
   const [active, setActive] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
-   const introPlayedRef = useRef(false);
+  const introPlayedRef = useRef(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -48,6 +48,30 @@ export default function Monet() {
     const z = getTabZIndex(id);
     if (z === 2) return `${base} is-second`;
     return `${base} is-third`;
+  };
+
+  const sendMonetTabsGoal = (id: number) => {
+    if (!window._tmr) return;
+  
+    if (id === 1) {
+      window._tmr.push({
+        id: "3718190",
+        type: "reachGoal",
+        goal: "setTab1",
+      });
+    } else if (id === 2) {
+      window._tmr.push({
+        id: "3718190",
+        type: "reachGoal",
+        goal: "setTab2",
+      });
+    } else if (id === 3) {
+      window._tmr.push({
+        id: "3718190",
+        type: "reachGoal",
+        goal: "setTab3",
+      });
+    }
   };
 
   const renderPanelById = (id: number) => {
@@ -150,9 +174,9 @@ export default function Monet() {
           start: "top 75%",
           once: true,
         },
-                onComplete: () => {
+        onComplete: () => {
           introPlayedRef.current = true;
-                }
+        },
       });
 
       tl.from(".Monet__content-header", {
@@ -199,9 +223,27 @@ export default function Monet() {
     };
   }, []);
 
-  
+  useLayoutEffect(() => {
+    if (!sectionRef.current) return;
+    if (!introPlayedRef.current) return;
 
-  
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".Monet__content-main--desktop .Monet__content-main--content--left",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        }
+      );
+    }, sectionRef);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [active]);
 
   return (
     <section className="Monet" id="monetization" ref={sectionRef}>
@@ -217,7 +259,10 @@ export default function Monet() {
                 key={tab.id}
                 style={{ zIndex: getTabZIndex(tab.id) }}
                 className={getTabClassName(tab.id)}
-                onClick={() => setActive(tab.id)}
+                onClick={() => {
+                  setActive(tab.id);
+                  sendMonetTabsGoal(tab.id);
+                }}
               >
                 {tab.label}
               </div>
@@ -244,7 +289,10 @@ export default function Monet() {
                   className={`Monet__content-main--tab Monet__content-main--tab--mobile ${
                     isOpen ? "is-active" : ""
                   }`}
-                  onClick={() => setActive(isOpen ? 0 : tab.id)}
+                  onClick={() => {
+                    setActive(isOpen ? 0 : tab.id);
+                    sendMonetTabsGoal(tab.id);
+                  }}
                 >
                   {tab.label}
                 </div>

@@ -20,48 +20,48 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       prev.includes(id) ? prev.filter((openId) => openId !== id) : [...prev, id]
     );
   };
+ 
+    const sendSidebarGoal = (categoryId: string) => {
+    if (!window._tmr) return;
 
-  //   const sendSidebarGoal = (categoryId: string) => {
-  //   if (!window._tmr) return;
+    let goal: string | null = null;
 
-  //   let goal: string | null = null;
+    switch (categoryId) {
+      case "channel":
+        goal = "scrollToFaqChannel";
+        break;
+      case "publishing":
+        goal = "scrollToFaqPublishing";
+        break;
+      case "monetization":
+        goal = "scrollToFaqMonetization";
+        break;
+      case "statistics":
+        goal = "scrollToFaqStatistics";
+        break;
+      case "cabinet":
+        goal = "scrollToFaqCabinet";
+        break;
+      case "support":
+        goal = "scrollToFaqSupport";
+        break;
+      default:
+        goal = null;
+    }
 
-  //   switch (categoryId) {
-  //     case "channel":
-  //       goal = "scrollToFaqChannel";
-  //       break;
-  //     case "publishing":
-  //       goal = "scrollToFaqPublishing";
-  //       break;
-  //     case "monetization":
-  //       goal = "scrollToFaqMonetization";
-  //       break;
-  //     case "statistics":
-  //       goal = "scrollToFaqStatistics";
-  //       break;
-  //     case "cabinet":
-  //       goal = "scrollToFaqCabinet";
-  //       break;
-  //     case "support":
-  //       goal = "scrollToFaqSupport";
-  //       break;
-  //     default:
-  //       goal = null;
-  //   }
+    if (!goal) return;
 
-  //   if (!goal) return;
-
-  //   window._tmr.push({
-  //     id: "3718190",
-  //     type: "reachGoal",
-  //     goal,
-  //   });
-  // };
+    window._tmr.push({
+      id: "3718190",
+      type: "reachGoal",
+      goal: goal
+    });
+  };
 
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategoryId(categoryId);
 
-    // sendSidebarGoal(categoryId);
+    sendSidebarGoal(categoryId);
 
     const el = document.getElementById(`faq-section-${categoryId}`);
     if (el) {

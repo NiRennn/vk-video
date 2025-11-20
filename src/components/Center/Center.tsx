@@ -59,15 +59,15 @@ export default function Center() {
     };
   }, []);
 
-  //   const sendCenterCommunityGoal = () => {
-  //   if (!window._tmr) return;
+    const sendCenterCommunityGoal = () => {
+    if (!window._tmr) return;
 
-  //   window._tmr.push({
-  //     id: "3718190",
-  //     type: "reachGoal",
-  //     goal: "goToCommunity", 
-  //   });
-  // };
+    window._tmr.push({
+      id: "3718190",
+      type: "reachGoal",
+      goal: "goToCommunity", 
+    });
+  };
 
   return (
     <section className="Center" ref={sectionRef}>
@@ -81,7 +81,7 @@ export default function Center() {
             выигрывай призы, приходи на вечеринки и узнавай новости первым
           </p>
           <a
-            // onClick={sendCenterCommunityGoal}
+            onClick={sendCenterCommunityGoal}
 
             href="https://vk.com/vkvideoauthors"
             className="Center__content-textBlock-btn"
