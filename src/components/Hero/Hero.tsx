@@ -19,7 +19,7 @@ export default function Hero() {
     <section className="Hero">
       <div className="Hero__content">
         <h1 className="Hero__content-header">
-          Начни свой путь <br /> к популярности и доходу в VK Видео
+          Начни свой путь <br /> к популярности и доходу в&nbsp;VK&nbsp;Видео
         </h1>
         <div className="Heo__content-imgBlock">
           <img

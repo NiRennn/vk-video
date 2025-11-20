@@ -59,6 +59,16 @@ export default function Center() {
     };
   }, []);
 
+  //   const sendCenterCommunityGoal = () => {
+  //   if (!window._tmr) return;
+
+  //   window._tmr.push({
+  //     id: "3718190",
+  //     type: "reachGoal",
+  //     goal: "goToCommunity", 
+  //   });
+  // };
+
   return (
     <section className="Center" ref={sectionRef}>
       <div className="Center__content">
@@ -70,7 +80,14 @@ export default function Center() {
             Присоединяйся к комьюнити авторов VK Видео: участвуй в конкурсах,
             выигрывай призы, приходи на вечеринки и узнавай новости первым
           </p>
-          <a href="https://vk.com/vkvideoauthors" className="Center__content-textBlock-btn">
+          <a
+            // onClick={sendCenterCommunityGoal}
+
+            href="https://vk.com/vkvideoauthors"
+            className="Center__content-textBlock-btn"
+            target="_blanc"
+            rel="noopener noreferrer"
+          >
             Перейти в сообщество для авторов
           </a>
         </div>

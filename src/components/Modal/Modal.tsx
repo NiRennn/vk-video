@@ -97,6 +97,26 @@ export default function Modal({ onClose }: ModalProps) {
     }
   };
 
+  // function sendModalCreateChannel() {
+  //   if (window._tmr) {
+  //     window._tmr.push({
+  //       id: "3718190",
+  //       type: "reachGoal",
+  //       goal: "createChannel",
+  //     });
+  //   }
+  // }
+
+  //   function sendModalAuthorize() {
+  //   if (window._tmr) {
+  //     window._tmr.push({
+  //       id: "3718190",
+  //       type: "reachGoal",
+  //       goal: "authorize",
+  //     });
+  //   }
+  // }
+
   return (
     <div
       className="Modal__overlay"
@@ -111,7 +131,7 @@ export default function Modal({ onClose }: ModalProps) {
         className="Modal"
         ref={modalRef}
         onMouseDown={(e) => e.stopPropagation()}
-      > 
+      >
         <img
           src="/icons/close.svg"
           alt="close"
@@ -124,17 +144,29 @@ export default function Modal({ onClose }: ModalProps) {
               Станьте автором прямо сейчас!
             </p>
             <p className="Modal__content-top-subtitle">
-              Создайте канал и зарегистрируйте&nbsp;аккаунт,
-              <br /> чтобы начать свой путь в VK&nbsp;Видео
+              Авторизуйтесь и создайте канал, чтобы начать свой путь в
+              VK&nbsp;Видео
             </p>
           </div>
           <div className="Modal__content-bot">
-            <a className="Modal__content-bot-btn wh" href="https://vkvideo.ru/">
+            <a
+            // onClick={sendModalCreateChannel}
+              className="Modal__content-bot-btn wh"
+              href="https://vkvideo.ru/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src="/icons/plus.svg" alt="" />
               <p>Создать новый канал VK&nbsp;Видео</p>
             </a>
-            <a className="Modal__content-bot-btn gr" href="https://vkvideo.ru/">
-              <p>Зарегистрироваться в VK&nbsp;Видео</p>
+            <a
+            // onClick={sendModalAuthorize}
+              className="Modal__content-bot-btn gr"
+              href="https://vkvideo.ru/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p>Авторизоваться в VK&nbsp;Видео</p>
             </a>
           </div>
         </div>

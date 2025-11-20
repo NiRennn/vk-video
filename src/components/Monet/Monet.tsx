@@ -17,6 +17,7 @@ export default function Monet() {
   const [active, setActive] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
+   const introPlayedRef = useRef(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -63,8 +64,8 @@ export default function Monet() {
                     сложностей
                   </li>
                   <li>
-                    Понятный расчёт. Узнай, как формируется твоё
-                    вознаграждение за просмотры и рекламу.
+                    Понятный расчёт. Узнай, как формируется твоё вознаграждение
+                    за просмотры и рекламу.
                   </li>
                   <li>
                     Разные возможности: Используй дополнительные опции для
@@ -149,6 +150,9 @@ export default function Monet() {
           start: "top 75%",
           once: true,
         },
+                onComplete: () => {
+          introPlayedRef.current = true;
+                }
       });
 
       tl.from(".Monet__content-header", {
@@ -194,6 +198,10 @@ export default function Monet() {
       ctx.revert();
     };
   }, []);
+
+  
+
+  
 
   return (
     <section className="Monet" id="monetization" ref={sectionRef}>
@@ -253,7 +261,10 @@ export default function Monet() {
       </div>
 
       <div className="Monet-btnBlock">
-        <Button text="Присоединиться&nbsp;к&nbsp;авторам" onClick={handleOpenModal} />
+        <Button
+          text="Присоединиться&nbsp;к&nbsp;авторам"
+          onClick={handleOpenModal}
+        />
       </div>
       {isModalOpen && <Modal onClose={handleCloseModal} />}
     </section>

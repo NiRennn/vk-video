@@ -14,7 +14,38 @@ export default function Header() {
     setIsModalOpen(false);
   };
 
+  //   const sendHeaderGoal = (id: string) => {
+  //   if (!window._tmr) return;
+
+  //   let goal: string | null = null;
+
+  //   switch (id) {
+  //     case "features":
+  //       goal = "scrollToNewOpportunities";
+  //       break;
+  //     case "cabinet":
+  //       goal = "scrollToCabinet";
+  //       break;
+  //     case "monetization":
+  //       goal = "scrollToMonetization";
+  //       break;
+  //     default:
+  //       goal = null;
+  //   }
+
+  //   if (!goal) return;
+
+  //   window._tmr.push({
+  //     id: "3718190",
+  //     type: "reachGoal",
+  //     goal,
+  //   });
+  // };
+
   const handleScrollTo = (id: string) => {
+    // sendHeaderGoal(id);
+
+
     const el = document.getElementById(id);
     if (!el) return;
 

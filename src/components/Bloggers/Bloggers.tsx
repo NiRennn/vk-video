@@ -204,7 +204,7 @@ export default function Bloggers({
       const trackLeft = track.getBoundingClientRect().left;
 
       const vpCenter = vpRect.left + vpRect.width / 2;
-      const influence = vpRect.width * 0.6;
+      const influence = vpRect.width * 0.65;
 
       const BASE_EXTRA_GAP = 32;
 

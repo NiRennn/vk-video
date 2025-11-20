@@ -21,8 +21,47 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     );
   };
 
+  //   const sendSidebarGoal = (categoryId: string) => {
+  //   if (!window._tmr) return;
+
+  //   let goal: string | null = null;
+
+  //   switch (categoryId) {
+  //     case "channel":
+  //       goal = "scrollToFaqChannel";
+  //       break;
+  //     case "publishing":
+  //       goal = "scrollToFaqPublishing";
+  //       break;
+  //     case "monetization":
+  //       goal = "scrollToFaqMonetization";
+  //       break;
+  //     case "statistics":
+  //       goal = "scrollToFaqStatistics";
+  //       break;
+  //     case "cabinet":
+  //       goal = "scrollToFaqCabinet";
+  //       break;
+  //     case "support":
+  //       goal = "scrollToFaqSupport";
+  //       break;
+  //     default:
+  //       goal = null;
+  //   }
+
+  //   if (!goal) return;
+
+  //   window._tmr.push({
+  //     id: "3718190",
+  //     type: "reachGoal",
+  //     goal,
+  //   });
+  // };
+
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategoryId(categoryId);
+
+    // sendSidebarGoal(categoryId);
 
     const el = document.getElementById(`faq-section-${categoryId}`);
     if (el) {
@@ -66,6 +105,8 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       observer.disconnect();
     };
   }, [categories]);
+
+
 
   return (
     <section className="faq">
