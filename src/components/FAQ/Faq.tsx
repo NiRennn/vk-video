@@ -15,13 +15,39 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     () => categories[0]?.id
   );
 
-  const handleToggleItem = (id: string) => {
-    setOpenItemIds((prev) =>
-      prev.includes(id) ? prev.filter((openId) => openId !== id) : [...prev, id]
-    );
-  };
- 
-    const sendSidebarGoal = (categoryId: string) => {
+const handleToggleItem = (id: string) => {
+  setOpenItemIds((prev) => {
+    const isOpen = prev.includes(id);
+    const next = isOpen
+      ? prev.filter((openId) => openId !== id)
+      : [...prev, id];
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+
+      if (isOpen) {
+        url.hash = "";
+      } else {
+        url.hash = `faq-${id}`;
+        
+        const el = document.getElementById(`faq-${id}`);
+        if (el) {
+          el.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }
+
+      window.history.replaceState(null, "", url.toString());
+    }
+
+    return next;
+  });
+};
+
+
+  const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
 
     let goal: string | null = null;
@@ -54,7 +80,7 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     window._tmr.push({
       id: "3718190",
       type: "reachGoal",
-      goal: goal
+      goal: goal,
     });
   };
 
@@ -107,9 +133,40 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
   }, [categories]);
 
 
+  useEffect(() => {
+  if (typeof window === "undefined") return;
+  if (!window.location.hash) return;
+
+  const rawHash = window.location.hash.slice(1);
+  if (!rawHash.startsWith("faq-")) return;
+
+  const itemId = rawHash.replace("faq-", "");
+
+  const category = categories.find((cat) =>
+    cat.items.some((item) => item.id === itemId)
+  );
+  if (!category) return;
+
+  setActiveCategoryId(category.id);
+
+  setOpenItemIds((prev) =>
+    prev.includes(itemId) ? prev : [...prev, itemId]
+  );
+
+  const el = document.getElementById(`faq-${itemId}`);
+  if (el) {
+    requestAnimationFrame(() => {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  }
+}, [categories]);
+
 
   return (
-    <section className="faq">
+    <section className="faq" id="faq">
       <div className="faq-h1-wrapper">
         <h1 className="faq-h1">
           Отвечаем <br /> на популярные вопросы
@@ -154,6 +211,7 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
                   return (
                     <article
                       key={item.id}
+                      id={`faq-${item.id}`}
                       className={
                         "faq__item" + (isOpen ? " faq__item--open" : "")
                       }

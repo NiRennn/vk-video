@@ -250,7 +250,7 @@ export default function Bloggers({
   }, [items, speed, gap]);
 
   return (
-    <section className="Bloggers">
+    <section className="Bloggers" id="bloggers">
       <h1 className="Bloggers__header">
         Более 100 000 блогеров уже в VK&nbsp;Видео
       </h1>

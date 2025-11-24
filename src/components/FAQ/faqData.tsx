@@ -12,7 +12,7 @@ export interface FaqCategory {
   title: string;
   items: FaqItem[];
 }
-
+ 
 export const faqData: FaqCategory[] = [
   {
     id: "channel",

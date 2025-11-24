@@ -70,7 +70,7 @@ export default function Center() {
   };
 
   return (
-    <section className="Center" ref={sectionRef}>
+    <section className="Center" ref={sectionRef} id="center-of-actions">
       <div className="Center__content">
         <div className="Center__content-textBlock">
           <p className="Center__content-textBlock-title">

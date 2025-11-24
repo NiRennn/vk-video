@@ -81,7 +81,7 @@ export default function HowBlock() {
   }, []);
 
   return (
-    <section className="HowBlock" ref={sectionRef}>
+    <section className="HowBlock" ref={sectionRef} id="how-become-author">
       <div className="HowBlock__container">
         <h1 className="HowBlock__container-header">
           Как стать автором VK&nbsp;Видео?

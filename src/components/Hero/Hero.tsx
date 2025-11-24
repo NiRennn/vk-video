@@ -15,7 +15,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="Hero">
+    <section className="Hero" id="hero">
       <div className="Hero__content">
         <h1 className="Hero__content-header">
           Начни свой путь <br /> к популярности и доходу в&nbsp;VK&nbsp;Видео
