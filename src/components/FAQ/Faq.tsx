@@ -9,43 +9,38 @@ interface FaqProps {
 
 export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
   const [openItemIds, setOpenItemIds] = useState<string[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(
     () => categories[0]?.id
   );
 
-const handleToggleItem = (id: string) => {
-  setOpenItemIds((prev) => {
-    const isOpen = prev.includes(id);
-    const next = isOpen
-      ? prev.filter((openId) => openId !== id)
-      : [...prev, id];
+  const currentFaqHashRef = useRef<string | null>(null);
 
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
+  const handleToggleItem = (id: string) => {
+    setOpenItemIds((prev) => {
+      const isOpen = prev.includes(id);
+      const next = isOpen
+        ? prev.filter((openId) => openId !== id)
+        : [...prev, id];
 
-      if (isOpen) {
-        url.hash = "";
-      } else {
-        url.hash = `faq-${id}`;
-        
-        const el = document.getElementById(`faq-${id}`);
-        if (el) {
-          el.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+
+        if (isOpen) {
+          url.hash = "";
+          currentFaqHashRef.current = null;
+        } else {
+          const newHash = `faq-${id}`;
+          url.hash = newHash;
+          currentFaqHashRef.current = newHash;
         }
+
+        window.history.replaceState(null, "", url.toString());
       }
 
-      window.history.replaceState(null, "", url.toString());
-    }
-
-    return next;
-  });
-};
-
+      return next;
+    });
+  };
 
   const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
@@ -86,7 +81,6 @@ const handleToggleItem = (id: string) => {
 
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategoryId(categoryId);
-
     sendSidebarGoal(categoryId);
 
     const el = document.getElementById(`faq-section-${categoryId}`);
@@ -125,6 +119,7 @@ const handleToggleItem = (id: string) => {
         threshold: [0.25, 0.5, 0.75],
       }
     );
+
     sections.forEach((section) => observer.observe(section));
 
     return () => {
@@ -132,38 +127,103 @@ const handleToggleItem = (id: string) => {
     };
   }, [categories]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!window.location.hash) return;
+
+    const rawHash = window.location.hash.slice(1);
+    if (!rawHash.startsWith("faq-")) return;
+
+    const itemId = rawHash.replace("faq-", "");
+
+    const category = categories.find((cat) =>
+      cat.items.some((item) => item.id === itemId)
+    );
+    if (!category) return;
+
+    setActiveCategoryId(category.id);
+
+    setOpenItemIds((prev) =>
+      prev.includes(itemId) ? prev : [...prev, itemId]
+    );
+
+    currentFaqHashRef.current = rawHash;
+
+    const el = document.getElementById(`faq-${itemId}`);
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
+  }, [categories]);
 
   useEffect(() => {
-  if (typeof window === "undefined") return;
-  if (!window.location.hash) return;
+    if (typeof window === "undefined") return;
 
-  const rawHash = window.location.hash.slice(1);
-  if (!rawHash.startsWith("faq-")) return;
+    const handleScroll = () => {
+      if (!openItemIds.length) return;
 
-  const itemId = rawHash.replace("faq-", "");
+      const offset = 140;
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
 
-  const category = categories.find((cat) =>
-    cat.items.some((item) => item.id === itemId)
-  );
-  if (!category) return;
+      const openElements: HTMLElement[] = openItemIds
+        .map((id) => document.getElementById(`faq-${id}`) as HTMLElement | null)
+        .filter((el): el is HTMLElement => !!el);
 
-  setActiveCategoryId(category.id);
+      if (!openElements.length) return;
 
-  setOpenItemIds((prev) =>
-    prev.includes(itemId) ? prev : [...prev, itemId]
-  );
+      let bestEl: HTMLElement | null = null;
 
-  const el = document.getElementById(`faq-${itemId}`);
-  if (el) {
-    requestAnimationFrame(() => {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+      openElements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const top = rect.top;
+        const bottom = rect.bottom;
+
+        if (bottom < 0 || top > viewportHeight) return;
+
+        if (!bestEl) {
+          bestEl = el;
+          return;
+        }
+
+        const bestRect = bestEl.getBoundingClientRect();
+
+        const bestTop = bestRect.top;
+
+        if (top <= offset && bestTop > offset) {
+          bestEl = el;
+        } else if (top <= offset && bestTop <= offset) {
+          if (top > bestTop) bestEl = el;
+        } else if (top > offset && bestTop > offset) {
+          if (top < bestTop) bestEl = el;
+        }
       });
-    });
-  }
-}, [categories]);
 
+      if (!bestEl) return;
+
+      const fullId = (bestEl as HTMLElement).id;
+      const newHash = fullId;
+
+      if (currentFaqHashRef.current === newHash) return;
+
+      currentFaqHashRef.current = newHash;
+
+      const url = new URL(window.location.href);
+      url.hash = newHash;
+      window.history.replaceState(null, "", url.toString());
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [openItemIds, categories]);
 
   return (
     <section className="faq" id="faq">

@@ -135,8 +135,8 @@
 
 .faq__item {
   border-bottom: 1px solid #00000033;
-  // padding-bottom: 36px;
-  // height: 66px;
+  scroll-margin-top: 140px;
+
 }
 
 .faq__item-header {
@@ -146,9 +146,6 @@
   border: none;
   background: none;
   display: flex;
-  // flex-direction: row;
-  // justify-content: space-between;
-  // align-items: center;
   cursor: pointer;
   transition: 0.4s ease;
 

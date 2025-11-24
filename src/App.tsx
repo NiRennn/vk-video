@@ -12,7 +12,6 @@ import WhyBlock from "./components/WhyBlock/WhyBlock";
 import { useEffect } from "react";
 
 const SECTION_IDS = [
-  "hero",
   "features",
   "how-become-author",
   "cabinet",
