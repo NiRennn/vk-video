@@ -186,6 +186,7 @@ export default function Cabinet() {
             <Button
               text="Присоединиться&nbsp;к&nbsp;авторам"
               onClick={handleOpenModal}
+              btnGoal="button3"
             />
           </div>
         </div>

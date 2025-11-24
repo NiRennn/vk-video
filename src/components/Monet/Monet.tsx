@@ -52,7 +52,7 @@ export default function Monet() {
 
   const sendMonetTabsGoal = (id: number) => {
     if (!window._tmr) return;
-  
+
     if (id === 1) {
       window._tmr.push({
         id: "3718190",
@@ -312,6 +312,7 @@ export default function Monet() {
         <Button
           text="Присоединиться&nbsp;к&nbsp;авторам"
           onClick={handleOpenModal}
+          btnGoal="button4"
         />
       </div>
       {isModalOpen && <Modal onClose={handleCloseModal} />}

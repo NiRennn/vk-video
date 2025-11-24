@@ -5,16 +5,15 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Modal from "../Modal/Modal";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HowBlock() {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOpenModal = () => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
@@ -62,15 +61,15 @@ export default function HowBlock() {
 
       ScrollTrigger.create({
         trigger: ".HowBlock__container-stepBlock",
-        start: "top 75%", 
-        once: true,     
+        start: "top 75%",
+        once: true,
         onEnter: () => {
           gsap.to(cards, {
             opacity: 1,
             y: 0,
             duration: 0.6,
             ease: "power3.out",
-            stagger: 0.25, 
+            stagger: 0.25,
           });
         },
       });
@@ -161,10 +160,13 @@ export default function HowBlock() {
       </div>
 
       <div className="HowBlock-btnBlock">
-        <Button text="Присоединиться&nbsp;к&nbsp;авторам" onClick={handleOpenModal}/>
+        <Button
+          text="Присоединиться&nbsp;к&nbsp;авторам"
+          onClick={handleOpenModal}
+          btnGoal="button2"
+        />
       </div>
-            {isModalOpen && <Modal onClose={handleCloseModal} />}
-      
+      {isModalOpen && <Modal onClose={handleCloseModal} />}
     </section>
   );
 }

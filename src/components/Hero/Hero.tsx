@@ -3,11 +3,10 @@ import "./Hero.scss";
 import Modal from "../Modal/Modal";
 import { useState } from "react";
 
-
 export default function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOpenModal = () => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
@@ -27,7 +26,7 @@ export default function Hero() {
             alt=""
             className="Hero__content-lebedev"
           />
-          <img 
+          <img
             src="/images/hero1.png"
             alt=""
             className="Hero__content-img n1"
@@ -37,7 +36,7 @@ export default function Hero() {
             alt=""
             className="Hero__content-img n2"
           />
-          <img 
+          <img
             src="/images/hero3.png"
             alt=""
             className="Hero__content-img n3"
@@ -55,8 +54,11 @@ export default function Hero() {
         </div>
       </div>
       <div className="Hero-btnBlock">
-      <Button text="Создать&nbsp;канал" onClick={handleOpenModal}/>
-
+        <Button
+          text="Создать&nbsp;канал"
+          onClick={handleOpenModal}
+          btnGoal="button1"
+        />
       </div>
       {isModalOpen && <Modal onClose={handleCloseModal} />}
     </section>

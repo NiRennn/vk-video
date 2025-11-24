@@ -57,6 +57,14 @@ export default function Header() {
       block: "start",
     });
 
+      if (window.history && window.history.pushState) {
+    const url = new URL(window.location.href);
+    url.hash = id;
+    window.history.pushState(null, "", url.toString());
+  } else {
+    window.location.hash = id;
+  }
+
     setIsMenuOpen(false);
   };
 
