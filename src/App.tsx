@@ -18,7 +18,7 @@ const SECTION_IDS = [
   "bloggers",
   "monetization",
   "center-of-actions",
-  "faq"
+  "faq",
 ];
 
 function App() {
@@ -61,9 +61,7 @@ function App() {
 
         currentId = newId;
 
-        const url = new URL(window.location.href);
-        url.hash = newId;
-        window.history.replaceState(null, "", url.toString());
+        window.history.replaceState(null, "", `#${newId}`);
       },
       {
         threshold: 0.6,
