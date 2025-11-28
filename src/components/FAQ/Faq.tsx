@@ -16,40 +16,35 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
   const currentFaqHashRef = useRef<string | null>(null);
 
-const handleToggleItem = (id: string) => {
-  setOpenItemIds((prev) => {
-    const isOpen = prev.includes(id);
-    const next = isOpen
-      ? prev.filter((openId) => openId !== id)
-      : [...prev, id];
+  const handleToggleItem = (id: string) => {
+    setOpenItemIds((prev) => {
+      const isOpen = prev.includes(id);
+      const next = isOpen
+        ? prev.filter((openId) => openId !== id)
+        : [...prev, id];
 
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
 
-      if (isOpen) {
-        // закрываем вопрос — только убираем hash, scrollTo не трогаем
-        url.hash = "";
-        currentFaqHashRef.current = null;
-      } else {
-        // открываем вопрос
-        const newHash = `faq-${id}`;
-        url.hash = newHash;
-        currentFaqHashRef.current = newHash;
+        if (isOpen) {
+          url.hash = "";
+          currentFaqHashRef.current = null;
+        } else {
+          const newHash = `faq-${id}`;
+          url.hash = newHash;
+          currentFaqHashRef.current = newHash;
 
-        // IMPORTANT: если до этого был scrollTo=cabinet и т.п. —
-        // перезатираем его на scrollTo=faq
-        const params = url.searchParams;
-        params.set("scrollTo", "faq");
-        url.search = params.toString();
+          const params = url.searchParams;
+          params.set("scrollTo", "faq");
+          url.search = params.toString();
+        }
+
+        window.history.replaceState(null, "", url.toString());
       }
 
-      window.history.replaceState(null, "", url.toString());
-    }
-
-    return next;
-  });
-};
-
+      return next;
+    });
+  };
 
   const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
@@ -97,18 +92,20 @@ const handleToggleItem = (id: string) => {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    // ставим scrollTo=faq ТОЛЬКО по клику в FAQ
-    if (typeof window !== "undefined" && window.history && window.history.pushState) {
+    if (
+      typeof window !== "undefined" &&
+      window.history &&
+      window.history.pushState
+    ) {
       const url = new URL(window.location.href);
       const params = url.searchParams;
 
-      params.set("scrollTo", "faq"); // важно: именно id секции, а не categoryId
+      params.set("scrollTo", "faq");
       url.search = params.toString();
 
       window.history.pushState(null, "", url.toString());
     }
   };
-
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>(

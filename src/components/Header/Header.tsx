@@ -46,21 +46,24 @@ export default function Header() {
     });
   };
 
-const handleScrollTo = (id: string) => {
+  const handleScrollTo = (id: string) => {
     sendHeaderGoal(id);
 
     const el = document.getElementById(id);
     if (el) {
+      const header = document.querySelector(".Header") as HTMLElement | null;
+      const headerOffset = header ? header.offsetHeight : 0;
+
       const rect = el.getBoundingClientRect();
-      const top = rect.top + window.pageYOffset;
+      const elementTop = rect.top + window.pageYOffset;
+      const offsetTop = Math.max(elementTop - headerOffset, 0);
 
       window.scrollTo({
-        top,
+        top: offsetTop,
         behavior: "smooth",
       });
     }
 
-    // обновляем ТОЛЬКО query-параметр scrollTo, без hash
     if (window.history && window.history.pushState) {
       const url = new URL(window.location.href);
       const params = url.searchParams;
