@@ -15,6 +15,8 @@ function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    let rafId: number | null = null;
+
     try {
       const url = new URL(window.location.href);
       const scrollToId = url.searchParams.get("scrollTo");
@@ -22,23 +24,39 @@ function App() {
 
       if (!scrollToId) return;
 
+      const doScroll = () => {
+        // Если есть конкретный FAQ-айтом
+        if (scrollToId === "faq" && faqParam) {
+          const itemEl = document.getElementById(`faq-${faqParam}`);
+          if (itemEl) {
+            itemEl.scrollIntoView({
+              behavior: "auto",
+              block: "start",
+            });
+            return;
+          }
+        }
 
-      if (scrollToId === "faq" && faqParam) {
-        return;
-      }
+        // Обычный скролл по id секции
+        const el = document.getElementById(scrollToId);
+        if (!el) return;
 
-      const el = document.getElementById(scrollToId);
-      if (!el) return;
-
-      requestAnimationFrame(() => {
         el.scrollIntoView({
           behavior: "auto",
           block: "start",
         });
-      });
+      };
+
+      rafId = window.requestAnimationFrame(doScroll);
     } catch (e) {
       console.error(e);
     }
+
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   return (

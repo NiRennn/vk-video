@@ -100,52 +100,42 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
   // Открытие нужного вопроса при заходе по ссылке
   // https://example.com/?scrollTo=faq&faq=my-question-id
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+ useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    let itemId: string | null = null;
+  let itemId: string | null = null;
 
-    try {
-      const url = new URL(window.location.href);
-      const faqParam = url.searchParams.get("faq");
+  try {
+    const url = new URL(window.location.href);
+    const faqParam = url.searchParams.get("faq");
 
-      if (faqParam) {
-        itemId = faqParam;
-      } else if (window.location.hash) {
-        // опциональный fallback для старых ссылок вида #faq-my-question-id
-        const rawHash = window.location.hash.slice(1);
-        if (rawHash.startsWith("faq-")) {
-          itemId = rawHash.replace("faq-", "");
-        }
+    if (faqParam) {
+      itemId = faqParam;
+    } else if (window.location.hash) {
+      const rawHash = window.location.hash.slice(1);
+      if (rawHash.startsWith("faq-")) {
+        itemId = rawHash.replace("faq-", "");
       }
-    } catch (e) {
-      console.error(e);
     }
+  } catch (e) {
+    console.error(e);
+  }
 
-    if (!itemId) return;
+  if (!itemId) return;
 
-    const category = categories.find((cat) =>
-      cat.items.some((item) => item.id === itemId)
-    );
-    if (!category) return;
+  const category = categories.find((cat) =>
+    cat.items.some((item) => item.id === itemId)
+  );
+  if (!category) return;
 
-    setActiveCategoryId(category.id);
-    setOpenItemIds((prev) =>
-      prev.includes(itemId!) ? prev : [...prev, itemId!]
-    );
+  setActiveCategoryId(category.id);
+  setOpenItemIds((prev) =>
+    prev.includes(itemId!) ? prev : [...prev, itemId!]
+  );
 
-    currentFaqIdRef.current = itemId;
+  currentFaqIdRef.current = itemId;
+}, [categories]);
 
-    const el = document.getElementById(`faq-${itemId}`);
-    if (el) {
-      requestAnimationFrame(() => {
-        el.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      });
-    }
-  }, [categories]);
 
   // Обновляем ?faq=... при скролле по открытому FAQ
   useEffect(() => {
