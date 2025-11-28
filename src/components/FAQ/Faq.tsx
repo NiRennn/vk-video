@@ -7,8 +7,6 @@ interface FaqProps {
   categories?: FaqCategory[];
 }
 
-const FAQ_PARAM = "faq";
-
 export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [openItemIds, setOpenItemIds] = useState<string[]>([]);
@@ -16,39 +14,42 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     () => categories[0]?.id
   );
 
-  const currentFaqParamRef = useRef<string | null>(null);
+  const currentFaqHashRef = useRef<string | null>(null);
 
 const handleToggleItem = (id: string) => {
-    setOpenItemIds((prev) => {
-      const isOpen = prev.includes(id);
-      const next = isOpen
-        ? prev.filter((openId) => openId !== id)
-        : [...prev, id];
+  setOpenItemIds((prev) => {
+    const isOpen = prev.includes(id);
+    const next = isOpen
+      ? prev.filter((openId) => openId !== id)
+      : [...prev, id];
 
-      if (typeof window !== "undefined") {
-        const url = new URL(window.location.href);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+
+      if (isOpen) {
+        // закрываем вопрос — только убираем hash, scrollTo не трогаем
+        url.hash = "";
+        currentFaqHashRef.current = null;
+      } else {
+        // открываем вопрос
+        const newHash = `faq-${id}`;
+        url.hash = newHash;
+        currentFaqHashRef.current = newHash;
+
+        // IMPORTANT: если до этого был scrollTo=cabinet и т.п. —
+        // перезатираем его на scrollTo=faq
         const params = url.searchParams;
-
-        if (isOpen) {
-          // закрываем этот item — если он был в query, убираем
-          if (params.get(FAQ_PARAM) === id) {
-            params.delete(FAQ_PARAM);
-            currentFaqParamRef.current = null;
-          }
-        } else {
-          // открываем — записываем в query ?faq=id
-          params.set(FAQ_PARAM, id);
-          currentFaqParamRef.current = id;
-        }
-
+        params.set("scrollTo", "faq");
         url.search = params.toString();
-        // hash не трогаем
-        window.history.replaceState(null, "", url.toString());
       }
 
-      return next;
-    });
-  };
+      window.history.replaceState(null, "", url.toString());
+    }
+
+    return next;
+  });
+};
+
 
   const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
@@ -77,7 +78,7 @@ const handleToggleItem = (id: string) => {
       default:
         goal = null;
     }
- 
+
     if (!goal) return;
 
     window._tmr.push({
@@ -95,7 +96,19 @@ const handleToggleItem = (id: string) => {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    // ставим scrollTo=faq ТОЛЬКО по клику в FAQ
+    if (typeof window !== "undefined" && window.history && window.history.pushState) {
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+
+      params.set("scrollTo", "faq"); // важно: именно id секции, а не categoryId
+      url.search = params.toString();
+
+      window.history.pushState(null, "", url.toString());
+    }
   };
+
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>(
@@ -137,18 +150,12 @@ const handleToggleItem = (id: string) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!window.location.hash) return;
 
-    const url = new URL(window.location.href);
-    let itemId = url.searchParams.get(FAQ_PARAM);
+    const rawHash = window.location.hash.slice(1);
+    if (!rawHash.startsWith("faq-")) return;
 
-    if (!itemId && window.location.hash) {
-      const rawHash = window.location.hash.slice(1); // без '#'
-      if (rawHash.startsWith("faq-")) {
-        itemId = rawHash.replace("faq-", "");
-      }
-    }
-
-    if (!itemId) return;
+    const itemId = rawHash.replace("faq-", "");
 
     const category = categories.find((cat) =>
       cat.items.some((item) => item.id === itemId)
@@ -158,10 +165,10 @@ const handleToggleItem = (id: string) => {
     setActiveCategoryId(category.id);
 
     setOpenItemIds((prev) =>
-      prev.includes(itemId!) ? prev : [...prev, itemId!]
+      prev.includes(itemId) ? prev : [...prev, itemId]
     );
 
-    currentFaqParamRef.current = itemId!;
+    currentFaqHashRef.current = rawHash;
 
     const el = document.getElementById(`faq-${itemId}`);
     if (el) {
@@ -205,6 +212,7 @@ const handleToggleItem = (id: string) => {
         }
 
         const bestRect = bestEl.getBoundingClientRect();
+
         const bestTop = bestRect.top;
 
         if (top <= offset && bestTop > offset) {
@@ -218,23 +226,20 @@ const handleToggleItem = (id: string) => {
 
       if (!bestEl) return;
 
-      const fullId = (bestEl as HTMLElement).id; // "faq-<itemId>"
-      const itemId = fullId.replace("faq-", "");
+      const fullId = (bestEl as HTMLElement).id;
+      const newHash = fullId;
 
-      if (currentFaqParamRef.current === itemId) return;
+      if (currentFaqHashRef.current === newHash) return;
 
-      currentFaqParamRef.current = itemId;
+      currentFaqHashRef.current = newHash;
 
       const url = new URL(window.location.href);
-      const params = url.searchParams;
-      params.set(FAQ_PARAM, itemId);
-      url.search = params.toString();
-      // hash не трогаем
+      url.hash = newHash;
       window.history.replaceState(null, "", url.toString());
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // инициализация
+    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);

@@ -11,89 +11,46 @@ import Monet from "./components/Monet/Monet";
 import WhyBlock from "./components/WhyBlock/WhyBlock";
 import { useEffect } from "react";
 
-const SECTION_IDS = [
-  "features",
-  "how-become-author",
-  "cabinet",
-  "bloggers",
-  "monetization",
-  "center-of-actions",
-  "faq",
-];
-
-const SCROLL_PARAM = "scrollTo";
-
 function App() {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const params = new URLSearchParams(window.location.search);
-    const scrollToId = params.get(SCROLL_PARAM);
+  const hash = window.location.hash;
+  // если в урле есть якорь faq-..., даём FAQ самому рулить скроллом
+  if (hash && hash.slice(1).startsWith("faq-")) {
+    return;
+  }
 
-    if (scrollToId) {
-      let attempts = 0;
-      const maxAttempts = 10;
+  const params = new URLSearchParams(window.location.search);
+  const scrollToId = params.get("scrollTo");
 
-      const tryScroll = () => {
-        const el = document.getElementById(scrollToId);
-        if (!el) {
-          if (attempts < maxAttempts) {
-            attempts += 1;
-            setTimeout(tryScroll, 100);
-          }
-          return;
-        }
+  if (!scrollToId) return;
 
-        el.scrollIntoView({
-          behavior: "auto",
-          block: "start",
-        });
-      };
+  let attempts = 0;
+  const maxAttempts = 20;
 
-      requestAnimationFrame(tryScroll);
+  const scroll = () => {
+    const el = document.getElementById(scrollToId);
+    if (!el) {
+      if (attempts < maxAttempts) {
+        attempts += 1;
+        setTimeout(scroll, 50);
+      }
+      return;
     }
 
-    const sections = SECTION_IDS.map((id) => {
-      const el = document.getElementById(id);
-      return el ? { id, el } : null;
-    }).filter(
-      (item): item is { id: string; el: HTMLElement } => item !== null
-    );
+    const rect = el.getBoundingClientRect();
+    const top = rect.top + window.pageYOffset;
 
-    if (!sections.length) return;
+    window.scrollTo({
+      top,
+      behavior: "auto",
+    });
+  };
 
-    let currentId: string | null = null;
+  requestAnimationFrame(scroll);
+}, []);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (!visible.length) return;
-
-        const newId = (visible[0].target as HTMLElement).id;
-        if (!newId || newId === currentId) return;
-
-        currentId = newId;
-
-        const url = new URL(window.location.href);
-        url.searchParams.set(SCROLL_PARAM, newId);
-        url.hash = "";
-
-        window.history.replaceState(null, "", url.toString());
-      },
-      {
-        threshold: 0.6,
-      }
-    );
-
-    sections.forEach(({ el }) => observer.observe(el));
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   return (
     <div className="App">
