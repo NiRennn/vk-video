@@ -25,9 +25,12 @@ function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    if (window.location.hash) {
-      const id = window.location.hash.slice(1);
-      const el = document.getElementById(id);
+    // 1. Читаем нужную секцию из query-параметра scrollTo
+    const params = new URLSearchParams(window.location.search);
+    const scrollToId = params.get("scrollTo");
+
+    if (scrollToId) {
+      const el = document.getElementById(scrollToId);
 
       if (el) {
         requestAnimationFrame(() => {
@@ -39,6 +42,7 @@ function App() {
       }
     }
 
+    // 2. Инициализация IntersectionObserver как было
     const sections = SECTION_IDS.map((id) => {
       const el = document.getElementById(id);
       return el ? { id, el } : null;
@@ -61,7 +65,15 @@ function App() {
 
         currentId = newId;
 
-        window.history.replaceState(null, "", `#${newId}`);
+        // 3. Аккуратно обновляем только scrollTo, сохраняя остальные query-параметры
+        const params = new URLSearchParams(window.location.search);
+        params.set("scrollTo", newId);
+
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}?${params.toString()}`
+        );
       },
       {
         threshold: 0.6,
