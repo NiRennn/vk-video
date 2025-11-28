@@ -16,35 +16,39 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
   const currentFaqHashRef = useRef<string | null>(null);
 
-  const handleToggleItem = (id: string) => {
-    setOpenItemIds((prev) => {
-      const isOpen = prev.includes(id);
-      const next = isOpen
-        ? prev.filter((openId) => openId !== id)
-        : [...prev, id];
+const handleToggleItem = (id: string) => {
+  setOpenItemIds((prev) => {
+    const isOpen = prev.includes(id);
+    const next = isOpen
+      ? prev.filter((openId) => openId !== id)
+      : [...prev, id];
 
-      if (typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
+      try {
         const url = new URL(window.location.href);
 
         if (isOpen) {
-          url.hash = "";
+          url.searchParams.delete("faq");
+
           currentFaqHashRef.current = null;
         } else {
-          const newHash = `faq-${id}`;
-          url.hash = newHash;
-          currentFaqHashRef.current = newHash;
+          url.searchParams.set("scrollTo", "faq");
+          url.searchParams.set("faq", id);
 
-          const params = url.searchParams;
-          params.set("scrollTo", "faq");
-          url.search = params.toString();
+          const newHash = `faq-${id}`;
+          currentFaqHashRef.current = newHash;
         }
 
         window.history.replaceState(null, "", url.toString());
+      } catch (e) {
+        console.error(e);
       }
+    }
 
-      return next;
-    });
-  };
+    return next;
+  });
+};
+
 
   const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
@@ -91,59 +95,54 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-
-    if (
-      typeof window !== "undefined" &&
-      window.history &&
-      window.history.pushState
-    ) {
-      const url = new URL(window.location.href);
-      const params = url.searchParams;
-
-      params.set("scrollTo", "faq");
-      url.search = params.toString();
-
-      window.history.pushState(null, "", url.toString());
-    }
   };
 
-  useEffect(() => {
-    const sections = document.querySelectorAll<HTMLElement>(
-      ".faq__category-section"
-    );
-    if (!sections.length) return;
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let bestRatio = 0;
-        let currentId: string | null = null;
+  let itemId: string | null = null;
 
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
-            bestRatio = entry.intersectionRatio;
-            const fullId = (entry.target as HTMLElement).id;
-            const id = fullId.replace("faq-section-", "");
-            currentId = id;
-          }
-        });
+  try {
+    const url = new URL(window.location.href);
+    const faqParam = url.searchParams.get("faq");
 
-        if (currentId) {
-          setActiveCategoryId(currentId);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-140px 0px -50% 0px",
-        threshold: [0.25, 0.5, 0.75],
+    if (faqParam) {
+      itemId = faqParam;
+    } else if (window.location.hash) {
+      const rawHash = window.location.hash.slice(1);
+      if (rawHash.startsWith("faq-")) {
+        itemId = rawHash.replace("faq-", "");
       }
-    );
+    }
+  } catch (e) {
+    console.error(e);
+  }
 
-    sections.forEach((section) => observer.observe(section));
+  if (!itemId) return;
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [categories]);
+  const category = categories.find((cat) =>
+    cat.items.some((item) => item.id === itemId)
+  );
+  if (!category) return;
+
+  setActiveCategoryId(category.id);
+  setOpenItemIds((prev) =>
+    prev.includes(itemId!) ? prev : [...prev, itemId!]
+  );
+
+  currentFaqHashRef.current = `faq-${itemId}`;
+
+  const el = document.getElementById(`faq-${itemId}`);
+  if (el) {
+    requestAnimationFrame(() => {
+      el.scrollIntoView({
+        behavior: "auto",
+        block: "start",
+      });
+    });
+  }
+}, [categories]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;

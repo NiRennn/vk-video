@@ -50,29 +50,25 @@ export default function Header() {
     sendHeaderGoal(id);
 
     const el = document.getElementById(id);
-    if (el) {
-      const header = document.querySelector(".Header") as HTMLElement | null;
-      const headerOffset = header ? header.offsetHeight : 0;
+    if (!el) return;
 
-      const rect = el.getBoundingClientRect();
-      const elementTop = rect.top + window.pageYOffset;
-      const offsetTop = Math.max(elementTop - headerOffset, 0);
-
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth",
-      });
-    }
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
 
     if (window.history && window.history.pushState) {
-      const url = new URL(window.location.href);
-      const params = url.searchParams;
-
-      params.set("scrollTo", id);
-      url.search = params.toString();
-      url.hash = "";
-
-      window.history.pushState(null, "", url.toString());
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("scrollTo", id);
+        window.history.pushState(null, "", url.toString());
+      } catch {
+        const [base] = window.location.href.split("?");
+        window.location.href = `${base}?scrollTo=${encodeURIComponent(id)}`;
+      }
+    } else {
+      const [base] = window.location.href.split("?");
+      window.location.href = `${base}?scrollTo=${encodeURIComponent(id)}`;
     }
 
     setIsMenuOpen(false);

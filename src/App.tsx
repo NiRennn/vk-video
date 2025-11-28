@@ -11,48 +11,30 @@ import Monet from "./components/Monet/Monet";
 import WhyBlock from "./components/WhyBlock/WhyBlock";
 import { useEffect } from "react";
 
+
+
 function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const hash = window.location.hash;
-    // если в урле есть якорь faq-..., даём FAQ самому рулить скроллом
-    if (hash && hash.slice(1).startsWith("faq-")) {
-      return;
-    }
+    try {
+      const url = new URL(window.location.href);
+      const scrollToId = url.searchParams.get("scrollTo");
 
-    const params = new URLSearchParams(window.location.search);
-    const scrollToId = params.get("scrollTo");
+      if (!scrollToId) return;
 
-    if (!scrollToId) return;
-
-    let attempts = 0;
-    const maxAttempts = 20;
-
-    const scroll = () => {
       const el = document.getElementById(scrollToId);
-      if (!el) {
-        if (attempts < maxAttempts) {
-          attempts += 1;
-          setTimeout(scroll, 50);
-        }
-        return;
-      }
+      if (!el) return;
 
-      const header = document.querySelector(".Header") as HTMLElement | null;
-      const headerOffset = header ? header.offsetHeight : 0;
-
-      const rect = el.getBoundingClientRect();
-      const elementTop = rect.top + window.pageYOffset;
-      const offsetTop = Math.max(elementTop - headerOffset, 0);
-
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "auto",
+      requestAnimationFrame(() => {
+        el.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
       });
-    };
-
-    requestAnimationFrame(scroll);
+    } catch (e) {
+      console.error(e);
+    }
   }, []);
 
   return (
