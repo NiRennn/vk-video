@@ -11,8 +11,6 @@ import Monet from "./components/Monet/Monet";
 import WhyBlock from "./components/WhyBlock/WhyBlock";
 import { useEffect } from "react";
 
-
-
 function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -20,8 +18,14 @@ function App() {
     try {
       const url = new URL(window.location.href);
       const scrollToId = url.searchParams.get("scrollTo");
+      const faqParam = url.searchParams.get("faq");
 
       if (!scrollToId) return;
+
+
+      if (scrollToId === "faq" && faqParam) {
+        return;
+      }
 
       const el = document.getElementById(scrollToId);
       if (!el) return;
