@@ -16,39 +16,38 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
   const currentFaqHashRef = useRef<string | null>(null);
 
-const handleToggleItem = (id: string) => {
-  setOpenItemIds((prev) => {
-    const isOpen = prev.includes(id);
-    const next = isOpen
-      ? prev.filter((openId) => openId !== id)
-      : [...prev, id];
+  const handleToggleItem = (id: string) => {
+    setOpenItemIds((prev) => {
+      const isOpen = prev.includes(id);
+      const next = isOpen
+        ? prev.filter((openId) => openId !== id)
+        : [...prev, id];
 
-    if (typeof window !== "undefined") {
-      try {
-        const url = new URL(window.location.href);
+      if (typeof window !== "undefined") {
+        try {
+          const url = new URL(window.location.href);
 
-        if (isOpen) {
-          url.searchParams.delete("faq");
+          if (isOpen) {
+            url.searchParams.delete("faq");
 
-          currentFaqHashRef.current = null;
-        } else {
-          url.searchParams.set("scrollTo", "faq");
-          url.searchParams.set("faq", id);
+            currentFaqHashRef.current = null;
+          } else {
+            url.searchParams.set("scrollTo", "faq");
+            url.searchParams.set("faq", id);
 
-          const newHash = `faq-${id}`;
-          currentFaqHashRef.current = newHash;
+            const newHash = `faq-${id}`;
+            currentFaqHashRef.current = newHash;
+          }
+
+          window.history.replaceState(null, "", url.toString());
+        } catch (e) {
+          console.error(e);
         }
-
-        window.history.replaceState(null, "", url.toString());
-      } catch (e) {
-        console.error(e);
       }
-    }
 
-    return next;
-  });
-};
-
+      return next;
+    });
+  };
 
   const sendSidebarGoal = (categoryId: string) => {
     if (!window._tmr) return;
@@ -97,52 +96,51 @@ const handleToggleItem = (id: string) => {
     }
   };
 
-useEffect(() => {
-  if (typeof window === "undefined") return;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  let itemId: string | null = null;
+    let itemId: string | null = null;
 
-  try {
-    const url = new URL(window.location.href);
-    const faqParam = url.searchParams.get("faq");
+    try {
+      const url = new URL(window.location.href);
+      const faqParam = url.searchParams.get("faq");
 
-    if (faqParam) {
-      itemId = faqParam;
-    } else if (window.location.hash) {
-      const rawHash = window.location.hash.slice(1);
-      if (rawHash.startsWith("faq-")) {
-        itemId = rawHash.replace("faq-", "");
+      if (faqParam) {
+        itemId = faqParam;
+      } else if (window.location.hash) {
+        const rawHash = window.location.hash.slice(1);
+        if (rawHash.startsWith("faq-")) {
+          itemId = rawHash.replace("faq-", "");
+        }
       }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
-  }
 
-  if (!itemId) return;
+    if (!itemId) return;
 
-  const category = categories.find((cat) =>
-    cat.items.some((item) => item.id === itemId)
-  );
-  if (!category) return;
+    const category = categories.find((cat) =>
+      cat.items.some((item) => item.id === itemId)
+    );
+    if (!category) return;
 
-  setActiveCategoryId(category.id);
-  setOpenItemIds((prev) =>
-    prev.includes(itemId!) ? prev : [...prev, itemId!]
-  );
+    setActiveCategoryId(category.id);
+    setOpenItemIds((prev) =>
+      prev.includes(itemId!) ? prev : [...prev, itemId!]
+    );
 
-  currentFaqHashRef.current = `faq-${itemId}`;
+    currentFaqHashRef.current = `faq-${itemId}`;
 
-  const el = document.getElementById(`faq-${itemId}`);
-  if (el) {
-    requestAnimationFrame(() => {
-      el.scrollIntoView({
-        behavior: "auto",
-        block: "start",
+    const el = document.getElementById(`faq-${itemId}`);
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
       });
-    });
-  }
-}, [categories]);
-
+    }
+  }, [categories]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -170,7 +168,7 @@ useEffect(() => {
     if (el) {
       requestAnimationFrame(() => {
         el.scrollIntoView({
-          behavior: "smooth",
+          behavior: "auto",
           block: "start",
         });
       });
