@@ -7,6 +7,8 @@ interface FaqProps {
   categories?: FaqCategory[];
 }
 
+const FAQ_PARAM = "faq";
+
 export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [openItemIds, setOpenItemIds] = useState<string[]>([]);
@@ -14,9 +16,9 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     () => categories[0]?.id
   );
 
-  const currentFaqHashRef = useRef<string | null>(null);
+  const currentFaqParamRef = useRef<string | null>(null);
 
-  const handleToggleItem = (id: string) => {
+const handleToggleItem = (id: string) => {
     setOpenItemIds((prev) => {
       const isOpen = prev.includes(id);
       const next = isOpen
@@ -25,16 +27,22 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
+        const params = url.searchParams;
 
         if (isOpen) {
-          url.hash = "";
-          currentFaqHashRef.current = null;
+          // закрываем этот item — если он был в query, убираем
+          if (params.get(FAQ_PARAM) === id) {
+            params.delete(FAQ_PARAM);
+            currentFaqParamRef.current = null;
+          }
         } else {
-          const newHash = `faq-${id}`;
-          url.hash = newHash;
-          currentFaqHashRef.current = newHash;
+          // открываем — записываем в query ?faq=id
+          params.set(FAQ_PARAM, id);
+          currentFaqParamRef.current = id;
         }
 
+        url.search = params.toString();
+        // hash не трогаем
         window.history.replaceState(null, "", url.toString());
       }
 
@@ -69,7 +77,7 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       default:
         goal = null;
     }
-
+ 
     if (!goal) return;
 
     window._tmr.push({
@@ -129,12 +137,18 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!window.location.hash) return;
 
-    const rawHash = window.location.hash.slice(1);
-    if (!rawHash.startsWith("faq-")) return;
+    const url = new URL(window.location.href);
+    let itemId = url.searchParams.get(FAQ_PARAM);
 
-    const itemId = rawHash.replace("faq-", "");
+    if (!itemId && window.location.hash) {
+      const rawHash = window.location.hash.slice(1); // без '#'
+      if (rawHash.startsWith("faq-")) {
+        itemId = rawHash.replace("faq-", "");
+      }
+    }
+
+    if (!itemId) return;
 
     const category = categories.find((cat) =>
       cat.items.some((item) => item.id === itemId)
@@ -144,10 +158,10 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     setActiveCategoryId(category.id);
 
     setOpenItemIds((prev) =>
-      prev.includes(itemId) ? prev : [...prev, itemId]
+      prev.includes(itemId!) ? prev : [...prev, itemId!]
     );
 
-    currentFaqHashRef.current = rawHash;
+    currentFaqParamRef.current = itemId!;
 
     const el = document.getElementById(`faq-${itemId}`);
     if (el) {
@@ -191,7 +205,6 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
         }
 
         const bestRect = bestEl.getBoundingClientRect();
-
         const bestTop = bestRect.top;
 
         if (top <= offset && bestTop > offset) {
@@ -205,20 +218,23 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
       if (!bestEl) return;
 
-      const fullId = (bestEl as HTMLElement).id;
-      const newHash = fullId;
+      const fullId = (bestEl as HTMLElement).id; // "faq-<itemId>"
+      const itemId = fullId.replace("faq-", "");
 
-      if (currentFaqHashRef.current === newHash) return;
+      if (currentFaqParamRef.current === itemId) return;
 
-      currentFaqHashRef.current = newHash;
+      currentFaqParamRef.current = itemId;
 
       const url = new URL(window.location.href);
-      url.hash = newHash;
+      const params = url.searchParams;
+      params.set(FAQ_PARAM, itemId);
+      url.search = params.toString();
+      // hash не трогаем
       window.history.replaceState(null, "", url.toString());
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // инициализация
 
     return () => {
       window.removeEventListener("scroll", handleScroll);

@@ -21,30 +21,44 @@ const SECTION_IDS = [
   "faq",
 ];
 
+const SCROLL_PARAM = "scrollTo";
+
 function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const params = new URLSearchParams(window.location.search);
-    const scrollToId = params.get("scrollTo");
+    const scrollToId = params.get(SCROLL_PARAM);
 
     if (scrollToId) {
-      const el = document.getElementById(scrollToId);
+      let attempts = 0;
+      const maxAttempts = 10;
 
-      if (el) {
-        requestAnimationFrame(() => {
-          el.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
+      const tryScroll = () => {
+        const el = document.getElementById(scrollToId);
+        if (!el) {
+          if (attempts < maxAttempts) {
+            attempts += 1;
+            setTimeout(tryScroll, 100);
+          }
+          return;
+        }
+
+        el.scrollIntoView({
+          behavior: "auto",
+          block: "start",
         });
-      }
+      };
+
+      requestAnimationFrame(tryScroll);
     }
 
     const sections = SECTION_IDS.map((id) => {
       const el = document.getElementById(id);
       return el ? { id, el } : null;
-    }).filter((item): item is { id: string; el: HTMLElement } => item !== null);
+    }).filter(
+      (item): item is { id: string; el: HTMLElement } => item !== null
+    );
 
     if (!sections.length) return;
 
@@ -63,14 +77,11 @@ function App() {
 
         currentId = newId;
 
-        const params = new URLSearchParams(window.location.search);
-        params.set("scrollTo", newId);
+        const url = new URL(window.location.href);
+        url.searchParams.set(SCROLL_PARAM, newId);
+        url.hash = "";
 
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}?${params.toString()}`
-        );
+        window.history.replaceState(null, "", url.toString());
       },
       {
         threshold: 0.6,
