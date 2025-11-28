@@ -191,6 +191,8 @@
 
 .faq__item-body {
   overflow: hidden;
+    max-height: 0;
+
   transition: max-height 0.5s ease;
 }
 
@@ -201,6 +203,10 @@
 .faq__item-body-inner img {
   max-width: 100%;
   display: block;
+}
+
+.faq__item-body--open {
+  max-height: 5000px; 
 }
 
 //стили для контента внутри вкладок аккордеона

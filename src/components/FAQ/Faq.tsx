@@ -8,13 +8,14 @@ interface FaqProps {
 }
 
 export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
-  const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  // const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [openItemIds, setOpenItemIds] = useState<string[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(
     () => categories[0]?.id
   );
 
-  const currentFaqHashRef = useRef<string | null>(null);
+  // теперь тут будем хранить просто id вопроса (а не hash-строку)
+  const currentFaqIdRef = useRef<string | null>(null);
 
   const handleToggleItem = (id: string) => {
     setOpenItemIds((prev) => {
@@ -28,15 +29,16 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
           const url = new URL(window.location.href);
 
           if (isOpen) {
+            // закрыли вопрос: убираем faq из query
             url.searchParams.delete("faq");
-
-            currentFaqHashRef.current = null;
+            // scrollTo оставляем "faq", чтобы при перезагрузке попасть в блок FAQ
+            currentFaqIdRef.current = null;
           } else {
+            // открыли вопрос: ?scrollTo=faq&faq=<id>
             url.searchParams.set("scrollTo", "faq");
             url.searchParams.set("faq", id);
 
-            const newHash = `faq-${id}`;
-            currentFaqHashRef.current = newHash;
+            currentFaqIdRef.current = id;
           }
 
           window.history.replaceState(null, "", url.toString());
@@ -96,6 +98,8 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     }
   };
 
+  // Открытие нужного вопроса при заходе по ссылке
+  // https://example.com/?scrollTo=faq&faq=my-question-id
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -108,6 +112,7 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       if (faqParam) {
         itemId = faqParam;
       } else if (window.location.hash) {
+        // опциональный fallback для старых ссылок вида #faq-my-question-id
         const rawHash = window.location.hash.slice(1);
         if (rawHash.startsWith("faq-")) {
           itemId = rawHash.replace("faq-", "");
@@ -129,52 +134,20 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       prev.includes(itemId!) ? prev : [...prev, itemId!]
     );
 
-    currentFaqHashRef.current = `faq-${itemId}`;
+    currentFaqIdRef.current = itemId;
 
     const el = document.getElementById(`faq-${itemId}`);
     if (el) {
       requestAnimationFrame(() => {
         el.scrollIntoView({
-          behavior: "auto",
+          behavior: "smooth",
           block: "start",
         });
       });
     }
   }, [categories]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!window.location.hash) return;
-
-    const rawHash = window.location.hash.slice(1);
-    if (!rawHash.startsWith("faq-")) return;
-
-    const itemId = rawHash.replace("faq-", "");
-
-    const category = categories.find((cat) =>
-      cat.items.some((item) => item.id === itemId)
-    );
-    if (!category) return;
-
-    setActiveCategoryId(category.id);
-
-    setOpenItemIds((prev) =>
-      prev.includes(itemId) ? prev : [...prev, itemId]
-    );
-
-    currentFaqHashRef.current = rawHash;
-
-    const el = document.getElementById(`faq-${itemId}`);
-    if (el) {
-      requestAnimationFrame(() => {
-        el.scrollIntoView({
-          behavior: "auto",
-          block: "start",
-        });
-      });
-    }
-  }, [categories]);
-
+  // Обновляем ?faq=... при скролле по открытому FAQ
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -206,7 +179,6 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
         }
 
         const bestRect = bestEl.getBoundingClientRect();
-
         const bestTop = bestRect.top;
 
         if (top <= offset && bestTop > offset) {
@@ -220,16 +192,22 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
       if (!bestEl) return;
 
+      // id элемента в DOM: "faq-my-question-id"
       const fullId = (bestEl as HTMLElement).id;
-      const newHash = fullId;
+      const itemId = fullId.replace("faq-", "");
 
-      if (currentFaqHashRef.current === newHash) return;
+      if (currentFaqIdRef.current === itemId) return;
 
-      currentFaqHashRef.current = newHash;
+      currentFaqIdRef.current = itemId;
 
-      const url = new URL(window.location.href);
-      url.hash = newHash;
-      window.history.replaceState(null, "", url.toString());
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("faq", itemId);
+        // scrollTo не трогаем, оставляем "faq"
+        window.history.replaceState(null, "", url.toString());
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -319,23 +297,16 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
                         </button>
                       </div>
 
-                      <div
-                        className="faq__item-body"
-                        style={{
-                          maxHeight: isOpen
-                            ? contentRefs.current[item.id]?.scrollHeight || 0
-                            : 0,
-                        }}
-                      >
-                        <div
-                          ref={(el) => {
-                            contentRefs.current[item.id] = el;
-                          }}
-                          className="faq__item-body-inner"
-                        >
-                          {item.content}
-                        </div>
-                      </div>
+<div
+  className={
+    "faq__item-body" + (isOpen ? " faq__item-body--open" : "")
+  }
+>
+  <div className="faq__item-body-inner">
+    {item.content}
+  </div>
+</div>
+
                     </article>
                   );
                 })}
