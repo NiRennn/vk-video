@@ -57,13 +57,16 @@ export default function Header() {
       block: "start",
     });
 
-      if (window.history && window.history.pushState) {
-    const url = new URL(window.location.href);
-    url.hash = id;
-    window.history.pushState(null, "", url.toString());
-  } else {
-    window.location.hash = id;
-  }
+    if (window.history && window.history.pushState) {
+      const url = new URL(window.location.href);
+      const params = new URLSearchParams(url.search);
+
+      params.set("scrollTo", id);
+      url.search = params.toString();
+      url.hash = "";
+
+      window.history.pushState(null, "", url.toString());
+    }
 
     setIsMenuOpen(false);
   };

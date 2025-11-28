@@ -25,7 +25,6 @@ function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // 1. Читаем нужную секцию из query-параметра scrollTo
     const params = new URLSearchParams(window.location.search);
     const scrollToId = params.get("scrollTo");
 
@@ -42,7 +41,6 @@ function App() {
       }
     }
 
-    // 2. Инициализация IntersectionObserver как было
     const sections = SECTION_IDS.map((id) => {
       const el = document.getElementById(id);
       return el ? { id, el } : null;
@@ -65,7 +63,6 @@ function App() {
 
         currentId = newId;
 
-        // 3. Аккуратно обновляем только scrollTo, сохраняя остальные query-параметры
         const params = new URLSearchParams(window.location.search);
         params.set("scrollTo", newId);
 
