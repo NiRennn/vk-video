@@ -25,7 +25,6 @@ function App() {
       if (!scrollToId) return;
 
       const doScroll = () => {
-        // Если есть конкретный FAQ-айтом
         if (scrollToId === "faq" && faqParam) {
           const itemEl = document.getElementById(`faq-${faqParam}`);
           if (itemEl) {
@@ -37,7 +36,6 @@ function App() {
           }
         }
 
-        // Обычный скролл по id секции
         const el = document.getElementById(scrollToId);
         if (!el) return;
 

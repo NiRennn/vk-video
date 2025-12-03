@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback,useState } from "react";
 import type React from "react";
 import gsap from "gsap";
 import "./Modal.scss";
@@ -7,10 +7,18 @@ type ModalProps = {
   onClose: () => void;
 };
 
+const DESKTOP_CREATE_CHANNEL_URL =
+  "https://vkvideo.ru/my_communities?show=create_video_channel";
+
+const MOBILE_CREATE_CHANNEL_URL =
+  "https://vkvideo.ru/my_communities?w=groups_create_new__vk_video_standalone";
+
 export default function Modal({ onClose }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const isClosingRef = useRef(false);
+
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleAnimateClose = useCallback(() => {
     if (isClosingRef.current) return;
@@ -52,6 +60,13 @@ export default function Modal({ onClose }: ModalProps) {
     const overlayEl = overlayRef.current;
     const modalEl = modalRef.current;
     if (!overlayEl || !modalEl) return;
+
+    if (typeof window !== "undefined") {
+      const ua =
+        navigator.userAgent || navigator.vendor || (window as any).opera;
+      const mobile = /android|iphone|ipad|ipod|windows phone/i.test(ua);
+      setIsMobile(mobile);
+    }
 
     gsap.set(overlayEl, { opacity: 0 });
     gsap.set(modalEl, { opacity: 0, y: -10, scale: 0.95 });
@@ -106,8 +121,8 @@ export default function Modal({ onClose }: ModalProps) {
       });
     }
   }
- 
-    function sendModalAuthorize() {
+
+  function sendModalAuthorize() {
     if (window._tmr) {
       window._tmr.push({
         id: "3718190",
@@ -150,9 +165,13 @@ export default function Modal({ onClose }: ModalProps) {
           </div>
           <div className="Modal__content-bot">
             <a
-            onClick={sendModalCreateChannel}
+              onClick={sendModalCreateChannel}
               className="Modal__content-bot-btn wh"
-              href="https://vkvideo.ru/"
+              href={
+                isMobile
+                  ? MOBILE_CREATE_CHANNEL_URL
+                  : DESKTOP_CREATE_CHANNEL_URL
+              }
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -160,7 +179,7 @@ export default function Modal({ onClose }: ModalProps) {
               <p>Создать новый канал VK&nbsp;Видео</p>
             </a>
             <a
-            onClick={sendModalAuthorize}
+              onClick={sendModalAuthorize}
               className="Modal__content-bot-btn gr"
               href="https://vkvideo.ru/"
               target="_blank"

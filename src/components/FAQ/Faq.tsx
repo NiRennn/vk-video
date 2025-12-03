@@ -8,13 +8,11 @@ interface FaqProps {
 }
 
 export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
-  // const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [openItemIds, setOpenItemIds] = useState<string[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState(
     () => categories[0]?.id
   );
 
-  // теперь тут будем хранить просто id вопроса (а не hash-строку)
   const currentFaqIdRef = useRef<string | null>(null);
 
   const handleToggleItem = (id: string) => {
@@ -29,12 +27,9 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
           const url = new URL(window.location.href);
 
           if (isOpen) {
-            // закрыли вопрос: убираем faq из query
             url.searchParams.delete("faq");
-            // scrollTo оставляем "faq", чтобы при перезагрузке попасть в блок FAQ
             currentFaqIdRef.current = null;
           } else {
-            // открыли вопрос: ?scrollTo=faq&faq=<id>
             url.searchParams.set("scrollTo", "faq");
             url.searchParams.set("faq", id);
 
@@ -98,8 +93,7 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
     }
   };
 
-  // Открытие нужного вопроса при заходе по ссылке
-  // https://example.com/?scrollTo=faq&faq=my-question-id
+
  useEffect(() => {
   if (typeof window === "undefined") return;
 
@@ -137,7 +131,6 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 }, [categories]);
 
 
-  // Обновляем ?faq=... при скролле по открытому FAQ
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -182,7 +175,6 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
 
       if (!bestEl) return;
 
-      // id элемента в DOM: "faq-my-question-id"
       const fullId = (bestEl as HTMLElement).id;
       const itemId = fullId.replace("faq-", "");
 
@@ -193,7 +185,6 @@ export const Faq: React.FC<FaqProps> = ({ categories = faqData }) => {
       try {
         const url = new URL(window.location.href);
         url.searchParams.set("faq", itemId);
-        // scrollTo не трогаем, оставляем "faq"
         window.history.replaceState(null, "", url.toString());
       } catch (e) {
         console.error(e);
